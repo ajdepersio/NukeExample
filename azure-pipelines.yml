@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - master
+
+variables:
+  - name: buildConfiguration
+    value: "Release"
+
+stages:
+  - stage: windows_latest
+    displayName: "windows-latest"
+    dependsOn: []
+    pool:
+      vmImage: "windows-latest"
+    jobs:
+      - job: Publish
+        displayName: "Publish"
+        steps:
+          - task: PowerShell@2
+            env:
+              NUKE_NUGET_API_KEY: $(nuget-api-key)
+            inputs:
+              filePath: '.\build.ps1'
+              arguments: "Publish"
